@@ -6,9 +6,8 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class PricingService {
@@ -19,7 +18,7 @@ public class PricingService {
         BigDecimal totalPrice = BigDecimal.ZERO;
 
         PaymentReceiptDTO result = new PaymentReceiptDTO();
-        Map<String, Integer> bookQuantitiesMap = purchaseDTO.getBookQuantities();
+        Map<String, Integer> bookQuantitiesMap = sortDescByValues(purchaseDTO.getBookQuantities());
         List<String> plainListBooks = getPlainList(bookQuantitiesMap);
 
         List<List<String>> outputLists = splitToDistinctLists(plainListBooks);
@@ -53,7 +52,7 @@ public class PricingService {
             boolean elementAdded = false;
 
             for (List<String> outputList : outputLists) {
-                if (!outputList.contains(element)) {
+                if (!outputList.contains(element) && outputList.size() < 4) {
                     outputList.add(element);
                     elementAdded = true;
                     break;
@@ -82,5 +81,13 @@ public class PricingService {
         }
 
         return bookList;
+    }
+
+    private LinkedHashMap<String, Integer> sortDescByValues(Map<String, Integer> bookQuantities) {
+        return bookQuantities.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
     }
 }
