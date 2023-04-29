@@ -18,7 +18,8 @@ class PricingServiceTest {
     public static final BigDecimal EXPECTED_FOUR_BOOKS_PRICE = BigDecimal.valueOf(200).setScale(1, RoundingMode.HALF_EVEN);
     public static final BigDecimal EXPECTED_FIVE_BOOKS_PRICE = BigDecimal.valueOf(250).setScale(1, RoundingMode.HALF_EVEN);
     public static final BigDecimal EXPECTED_TWO_DIFFERENT_BOOKS_PRICE = new BigDecimal(95).setScale(1, RoundingMode.HALF_EVEN);
-    public static final BigDecimal EXPECTED_THREE_DIFFERENT_BOOKS_PRICE = new BigDecimal("135").setScale(1, RoundingMode.HALF_EVEN);
+    public static final BigDecimal EXPECTED_THREE_DIFFERENT_BOOKS_PRICE = new BigDecimal(135).setScale(1, RoundingMode.HALF_EVEN);
+    public static final BigDecimal EXPECTED_THREE_BOOKS_2_EACH_AND_TWO_DIFFERENT_BOOKS = new BigDecimal(320).setScale(1, RoundingMode.HALF_EVEN);
 
     private PricingService pricingService;
 
@@ -105,5 +106,20 @@ class PricingServiceTest {
 
         PaymentReceiptDTO paymentReceiptDTO = pricingService.getPrice(purchaseDTO);
         Assertions.assertEquals(EXPECTED_THREE_DIFFERENT_BOOKS_PRICE, paymentReceiptDTO.getPrice());
+    }
+
+    @Test
+    void getPrice_2_2_2_1_1() {
+        PurchaseDTO purchaseDTO = new PurchaseDTO();
+        Map<String, Integer> booksQuantities = new HashMap<>();
+        booksQuantities.put("Book1", 2);
+        booksQuantities.put("Book2", 2);
+        booksQuantities.put("Book3", 2);
+        booksQuantities.put("Book4", 1);
+        booksQuantities.put("Book5", 1);
+        purchaseDTO.setBookQuantities(booksQuantities);
+
+        PaymentReceiptDTO paymentReceiptDTO = pricingService.getPrice(purchaseDTO);
+        Assertions.assertEquals(EXPECTED_THREE_BOOKS_2_EACH_AND_TWO_DIFFERENT_BOOKS, paymentReceiptDTO.getPrice());
     }
 }
