@@ -22,6 +22,31 @@ public class PricingService {
         Map<String, Integer> bookQuantitiesMap = purchaseDTO.getBookQuantities();
         List<String> plainListBooks = getPlainList(bookQuantitiesMap);
 
+        List<List<String>> outputLists = splitToDistinctLists(plainListBooks);
+
+        totalPrice = getDiscountedPrice(totalPrice, outputLists);
+
+
+        BigDecimal finalPrice = totalPrice.setScale(1, RoundingMode.HALF_EVEN);
+        result.setPrice(finalPrice);
+        return result;
+    }
+
+    private static BigDecimal getDiscountedPrice(BigDecimal totalPrice, List<List<String>> outputLists) {
+        for (List<String> list : outputLists) {
+            double discount = switch (list.size()) {
+                case 2 -> 0.95;
+                case 3 -> 0.90;
+                case 4 -> 0.80;
+                case 5 -> 0.75;
+                default -> 1;
+            };
+            totalPrice = totalPrice.add(BOOK_PRICE.multiply(BigDecimal.valueOf(list.size())).multiply(BigDecimal.valueOf(discount)));
+        }
+        return totalPrice;
+    }
+
+    private static List<List<String>> splitToDistinctLists(List<String> plainListBooks) {
         List<List<String>> outputLists = new ArrayList<>();
 
         for (String element : plainListBooks) {
@@ -41,22 +66,7 @@ public class PricingService {
                 outputLists.add(newOutputList);
             }
         }
-
-        for (List<String> list : outputLists) {
-            double discount = switch (list.size()) {
-                case 2 -> 0.95;
-                case 3 -> 0.90;
-                case 4 -> 0.80;
-                case 5 -> 0.75;
-                default -> 1;
-            };
-            totalPrice = totalPrice.add(BOOK_PRICE.multiply(BigDecimal.valueOf(list.size())).multiply(BigDecimal.valueOf(discount)));
-        }
-
-
-        BigDecimal finalPrice = totalPrice.setScale(1, RoundingMode.HALF_EVEN);
-        result.setPrice(finalPrice);
-        return result;
+        return outputLists;
     }
 
     public static List<String> getPlainList(Map<String, Integer> bookMap) {
@@ -72,29 +82,5 @@ public class PricingService {
         }
 
         return bookList;
-    }
-
-    public static List<List<String>> splitStringList(List<String> inputList) {
-        List<List<String>> outputLists = new ArrayList<>();
-
-        for (String element : inputList) {
-            boolean elementAdded = false;
-
-            for (List<String> outputList : outputLists) {
-                if (!outputList.contains(element)) {
-                    outputList.add(element);
-                    elementAdded = true;
-                    break;
-                }
-            }
-
-            if (!elementAdded) {
-                List<String> newOutputList = new ArrayList<>();
-                newOutputList.add(element);
-                outputLists.add(newOutputList);
-            }
-        }
-
-        return outputLists;
     }
 }
