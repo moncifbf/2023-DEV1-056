@@ -6,12 +6,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PricingServiceTest {
+class PricingServiceTest {
     private PricingService pricingService;
 
     @BeforeEach

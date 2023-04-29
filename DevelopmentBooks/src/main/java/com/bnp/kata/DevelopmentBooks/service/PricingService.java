@@ -9,6 +9,6 @@ public class PricingService {
     public PaymentReceiptDTO getPrice(PurchaseDTO purchaseDTO) {
         PaymentReceiptDTO result = new PaymentReceiptDTO();
 
-        return null;
+        return result;
     }
 }
