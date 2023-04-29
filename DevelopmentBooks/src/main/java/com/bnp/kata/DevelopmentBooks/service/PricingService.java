@@ -16,10 +16,45 @@ public class PricingService {
 
 
     public PaymentReceiptDTO getPrice(PurchaseDTO purchaseDTO) {
+        BigDecimal totalPrice = BigDecimal.ZERO;
+
         PaymentReceiptDTO result = new PaymentReceiptDTO();
         Map<String, Integer> bookQuantitiesMap = purchaseDTO.getBookQuantities();
         List<String> plainListBooks = getPlainList(bookQuantitiesMap);
-        BigDecimal finalPrice = BOOK_PRICE.multiply(BigDecimal.valueOf(plainListBooks.size()));
+
+        List<List<String>> outputLists = new ArrayList<>();
+
+        for (String element : plainListBooks) {
+            boolean elementAdded = false;
+
+            for (List<String> outputList : outputLists) {
+                if (!outputList.contains(element)) {
+                    outputList.add(element);
+                    elementAdded = true;
+                    break;
+                }
+            }
+
+            if (!elementAdded) {
+                List<String> newOutputList = new ArrayList<>();
+                newOutputList.add(element);
+                outputLists.add(newOutputList);
+            }
+        }
+
+        for (List<String> list : outputLists) {
+            double discount = switch (list.size()) {
+                case 2 -> 0.95;
+                case 3 -> 0.90;
+                case 4 -> 0.80;
+                case 5 -> 0.75;
+                default -> 1;
+            };
+            totalPrice = totalPrice.add(BOOK_PRICE.multiply(BigDecimal.valueOf(list.size())).multiply(BigDecimal.valueOf(discount)));
+        }
+
+
+        BigDecimal finalPrice = totalPrice.setScale(1, RoundingMode.HALF_EVEN);
         result.setPrice(finalPrice);
         return result;
     }
@@ -37,5 +72,29 @@ public class PricingService {
         }
 
         return bookList;
+    }
+
+    public static List<List<String>> splitStringList(List<String> inputList) {
+        List<List<String>> outputLists = new ArrayList<>();
+
+        for (String element : inputList) {
+            boolean elementAdded = false;
+
+            for (List<String> outputList : outputLists) {
+                if (!outputList.contains(element)) {
+                    outputList.add(element);
+                    elementAdded = true;
+                    break;
+                }
+            }
+
+            if (!elementAdded) {
+                List<String> newOutputList = new ArrayList<>();
+                newOutputList.add(element);
+                outputLists.add(newOutputList);
+            }
+        }
+
+        return outputLists;
     }
 }

@@ -17,7 +17,7 @@ class PricingServiceTest {
     public static final BigDecimal EXPECTED_THREE_BOOKS_PRICE = BigDecimal.valueOf(150).setScale(1, RoundingMode.HALF_EVEN);
     public static final BigDecimal EXPECTED_FOUR_BOOKS_PRICE = BigDecimal.valueOf(200).setScale(1, RoundingMode.HALF_EVEN);
     public static final BigDecimal EXPECTED_FIVE_BOOKS_PRICE = BigDecimal.valueOf(250).setScale(1, RoundingMode.HALF_EVEN);
-    public static final BigDecimal EXPECTED_TWO_DIFFERENT_BOOKS_PRICE = new BigDecimal("95").setScale(2, RoundingMode.HALF_EVEN);
+    public static final BigDecimal EXPECTED_TWO_DIFFERENT_BOOKS_PRICE = new BigDecimal("95").setScale(1, RoundingMode.HALF_EVEN);
 
     private PricingService pricingService;
 
