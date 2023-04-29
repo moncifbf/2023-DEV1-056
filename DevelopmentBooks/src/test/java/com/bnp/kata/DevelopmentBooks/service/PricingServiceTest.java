@@ -31,4 +31,15 @@ class PricingServiceTest {
         PaymentReceiptDTO paymentReceiptDTO = pricingService.getPrice(purchaseDTO);
         Assertions.assertEquals(EXPECTED_ONE_BOOK_PRICE, paymentReceiptDTO.getPrice());
     }
+
+    @Test
+    void getPrice_2() {
+        PurchaseDTO purchaseDTO = new PurchaseDTO();
+        Map<String, Integer> booksQuantities = new HashMap<>();
+        booksQuantities.put("Book1", 2);
+        purchaseDTO.setBookQuantities(booksQuantities);
+
+        PaymentReceiptDTO paymentReceiptDTO = pricingService.getPrice(purchaseDTO);
+        Assertions.assertEquals(BigDecimal.valueOf(100).setScale(1, RoundingMode.HALF_EVEN), paymentReceiptDTO.getPrice());
+    }
 }
