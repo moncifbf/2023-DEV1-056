@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +27,6 @@ class PricingServiceTest {
         purchaseDTO.setBookQuantities(booksQuantities);
 
         PaymentReceiptDTO paymentReceiptDTO = pricingService.getPrice(purchaseDTO);
-        Assertions.assertEquals(50, paymentReceiptDTO.getPrice());
+        Assertions.assertEquals(BigDecimal.valueOf(50).setScale(1, RoundingMode.HALF_EVEN), paymentReceiptDTO.getPrice());
     }
 }

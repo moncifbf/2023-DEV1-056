@@ -9,7 +9,7 @@ import java.math.RoundingMode;
 
 @Service
 public class PricingService {
-    private static final BigDecimal BOOK_PRICE = new BigDecimal(50).setScale(2, RoundingMode.HALF_EVEN);
+    private static final BigDecimal BOOK_PRICE = new BigDecimal(50).setScale(1, RoundingMode.HALF_EVEN);
 
 
     public PaymentReceiptDTO getPrice(PurchaseDTO purchaseDTO) {
