@@ -15,23 +15,26 @@ public class PricingService {
 
 
     public PaymentReceiptDTO getPrice(PurchaseDTO purchaseDTO) {
-        BigDecimal totalPrice = BigDecimal.ZERO;
+        BigDecimal finalPrice = BigDecimal.valueOf(Double.MAX_VALUE);
 
         PaymentReceiptDTO result = new PaymentReceiptDTO();
         Map<String, Integer> bookQuantitiesMap = sortDescByValues(purchaseDTO.getBookQuantities());
+        int size = bookQuantitiesMap.size();
         List<String> plainListBooks = getPlainList(bookQuantitiesMap);
 
-        List<List<String>> outputLists = splitToDistinctLists(plainListBooks);
-
-        totalPrice = getDiscountedPrice(totalPrice, outputLists);
-
-
-        BigDecimal finalPrice = totalPrice.setScale(1, RoundingMode.HALF_EVEN);
+        for (int maxListSize = 1; maxListSize <= size; maxListSize++) {
+            List<List<String>> outputLists = splitToDistinctLists(plainListBooks, maxListSize);
+            BigDecimal tempPrice = getDiscountedPrice(outputLists);
+            if (tempPrice.compareTo(finalPrice) < 0) {
+                finalPrice = tempPrice;
+            }
+        }
         result.setPrice(finalPrice);
         return result;
     }
 
-    private static BigDecimal getDiscountedPrice(BigDecimal totalPrice, List<List<String>> outputLists) {
+    private static BigDecimal getDiscountedPrice(List<List<String>> outputLists) {
+        BigDecimal totalPrice = BigDecimal.ZERO;
         for (List<String> list : outputLists) {
             double discount = switch (list.size()) {
                 case 2 -> 0.95;
@@ -42,17 +45,17 @@ public class PricingService {
             };
             totalPrice = totalPrice.add(BOOK_PRICE.multiply(BigDecimal.valueOf(list.size())).multiply(BigDecimal.valueOf(discount)));
         }
-        return totalPrice;
+        return totalPrice.setScale(1, RoundingMode.HALF_EVEN);
     }
 
-    private static List<List<String>> splitToDistinctLists(List<String> plainListBooks) {
+    private static List<List<String>> splitToDistinctLists(List<String> plainListBooks, int maxListSize) {
         List<List<String>> outputLists = new ArrayList<>();
 
         for (String element : plainListBooks) {
             boolean elementAdded = false;
 
             for (List<String> outputList : outputLists) {
-                if (!outputList.contains(element) && outputList.size() < 4) {
+                if (!outputList.contains(element) && outputList.size() < maxListSize) {
                     outputList.add(element);
                     elementAdded = true;
                     break;
@@ -68,7 +71,7 @@ public class PricingService {
         return outputLists;
     }
 
-    public static List<String> getPlainList(Map<String, Integer> bookMap) {
+    private static List<String> getPlainList(Map<String, Integer> bookMap) {
         List<String> bookList = new ArrayList<>();
 
         for (Map.Entry<String, Integer> entry : bookMap.entrySet()) {
