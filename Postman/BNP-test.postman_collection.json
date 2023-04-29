@@ -1,0 +1,100 @@
+{
+	"info": {
+		"_postman_id": "e19438b5-5f20-4054-9b1e-ca1e31735980",
+		"name": "BNP-test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12528765"
+	},
+	"item": [
+		{
+			"name": "Get price for main test case",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"bookQuantities\": {\r\n        \"Clean Code\": 2,\r\n        \"Clean Coder\": 2,\r\n        \"Clean Architecture\": 2,\r\n        \"Test Driven Development by Example\": 1,\r\n        \"Working effectively with Legacy Code\": 1\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9090/api/v1/book/buy",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"api",
+						"v1",
+						"book",
+						"buy"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get price for three different books",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"bookQuantities\": {\r\n        \"Clean Code\": 1,\r\n        \"Clean Coder\": 1,\r\n        \"Clean Architecture\": 1\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9090/api/v1/book/buy",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"api",
+						"v1",
+						"book",
+						"buy"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get price for three identical books",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"bookQuantities\": {\r\n        \"Clean Code\": 3\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9090/api/v1/book/buy",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"api",
+						"v1",
+						"book",
+						"buy"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
