@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class PricingService {
@@ -14,8 +17,25 @@ public class PricingService {
 
     public PaymentReceiptDTO getPrice(PurchaseDTO purchaseDTO) {
         PaymentReceiptDTO result = new PaymentReceiptDTO();
-        BigDecimal finalPrice = BOOK_PRICE.multiply(BigDecimal.valueOf(purchaseDTO.getBookQuantities().size()));
+        Map<String, Integer> bookQuantitiesMap = purchaseDTO.getBookQuantities();
+        List<String> plainListBooks = getPlainList(bookQuantitiesMap);
+        BigDecimal finalPrice = BOOK_PRICE.multiply(BigDecimal.valueOf(plainListBooks.size()));
         result.setPrice(finalPrice);
         return result;
+    }
+
+    public static List<String> getPlainList(Map<String, Integer> bookMap) {
+        List<String> bookList = new ArrayList<>();
+
+        for (Map.Entry<String, Integer> entry : bookMap.entrySet()) {
+            String bookName = entry.getKey();
+            int numBooks = entry.getValue();
+
+            for (int i = 0; i < numBooks; i++) {
+                bookList.add(bookName);
+            }
+        }
+
+        return bookList;
     }
 }
