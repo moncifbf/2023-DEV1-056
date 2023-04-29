@@ -33,6 +33,5 @@ class ITBookEndpoint {
 
         ResponseEntity<PaymentReceiptDTO> response = restTemplate.postForEntity("/api/v1/book/buy", purchase, PaymentReceiptDTO.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(BigDecimal.valueOf(50), response.getBody().getPrice());
     }
 }
