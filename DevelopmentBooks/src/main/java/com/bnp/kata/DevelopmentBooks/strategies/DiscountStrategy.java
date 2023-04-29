@@ -1,16 +1,15 @@
 package com.bnp.kata.DevelopmentBooks.strategies;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 public interface DiscountStrategy {
 
     BigDecimal BOOK_PRICE = BigDecimal.valueOf(50);
-    BigDecimal ONE_BOOK_DISCOUNT = BigDecimal.valueOf(1).setScale(2, RoundingMode.HALF_EVEN);
-    BigDecimal TWO_BOOKS_DISCOUNT = BigDecimal.valueOf(0.95).setScale(2, RoundingMode.HALF_EVEN);
-    BigDecimal THREE_BOOKS_DISCOUNT = BigDecimal.valueOf(0.9).setScale(2, RoundingMode.HALF_EVEN);
-    BigDecimal FOUR_BOOKS_DISCOUNT = BigDecimal.valueOf(0.8).setScale(2, RoundingMode.HALF_EVEN);
-    BigDecimal FIVE_BOOKS_DISCOUNT = BigDecimal.valueOf(0.75).setScale(2, RoundingMode.HALF_EVEN);
+    BigDecimal ONE_BOOK_DISCOUNT = BigDecimal.valueOf(1);
+    BigDecimal TWO_BOOKS_DISCOUNT = BigDecimal.valueOf(0.95);
+    BigDecimal THREE_BOOKS_DISCOUNT = BigDecimal.valueOf(0.9);
+    BigDecimal FOUR_BOOKS_DISCOUNT = BigDecimal.valueOf(0.8);
+    BigDecimal FIVE_BOOKS_DISCOUNT = BigDecimal.valueOf(0.75);
 
     BigDecimal apply(int size);
 

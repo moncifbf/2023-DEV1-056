@@ -66,16 +66,7 @@ public class PricingService {
 
     private static List<String> getPlainList(Map<String, Integer> bookMap) {
         List<String> bookList = new ArrayList<>();
-
-        for (Map.Entry<String, Integer> entry : bookMap.entrySet()) {
-            String bookName = entry.getKey();
-            int numBooks = entry.getValue();
-
-            for (int i = 0; i < numBooks; i++) {
-                bookList.add(bookName);
-            }
-        }
-
+        bookMap.forEach((bookName, numBooks) -> bookList.addAll(Collections.nCopies(numBooks, bookName))); 
         return bookList;
     }
 
