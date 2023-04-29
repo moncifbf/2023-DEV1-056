@@ -2,6 +2,9 @@ package com.bnp.kata.DevelopmentBooks.strategies;
 
 import java.math.BigDecimal;
 
+/**
+ * A Functional Interface to manage discount strategies
+ */
 public interface DiscountStrategy {
 
     BigDecimal BOOK_PRICE = BigDecimal.valueOf(50);
