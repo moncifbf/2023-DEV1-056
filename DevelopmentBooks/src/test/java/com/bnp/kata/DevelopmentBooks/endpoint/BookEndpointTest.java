@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(BookEndpoint.class)
@@ -35,6 +36,7 @@ class BookEndpointTest {
                         .contentType(APPLICATION_JSON)
                         .content("{\"Clean Code (Robert Martin, 2008)\":1}")
                 )
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("price").value("50"));
     }
 }
