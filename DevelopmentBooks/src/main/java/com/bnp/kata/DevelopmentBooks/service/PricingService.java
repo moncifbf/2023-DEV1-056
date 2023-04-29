@@ -2,6 +2,7 @@ package com.bnp.kata.DevelopmentBooks.service;
 
 import com.bnp.kata.DevelopmentBooks.model.PaymentReceiptDTO;
 import com.bnp.kata.DevelopmentBooks.model.PurchaseDTO;
+import com.bnp.kata.DevelopmentBooks.strategies.DiscountResolver;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -15,9 +16,9 @@ public class PricingService {
 
 
     public PaymentReceiptDTO getPrice(PurchaseDTO purchaseDTO) {
+        PaymentReceiptDTO result = new PaymentReceiptDTO();
         BigDecimal finalPrice = BigDecimal.valueOf(Double.MAX_VALUE);
 
-        PaymentReceiptDTO result = new PaymentReceiptDTO();
         Map<String, Integer> bookQuantitiesMap = sortDescByValues(purchaseDTO.getBookQuantities());
         int size = bookQuantitiesMap.size();
         List<String> plainListBooks = getPlainList(bookQuantitiesMap);
@@ -36,14 +37,8 @@ public class PricingService {
     private static BigDecimal getDiscountedPrice(List<List<String>> outputLists) {
         BigDecimal totalPrice = BigDecimal.ZERO;
         for (List<String> list : outputLists) {
-            double discount = switch (list.size()) {
-                case 2 -> 0.95;
-                case 3 -> 0.90;
-                case 4 -> 0.80;
-                case 5 -> 0.75;
-                default -> 1;
-            };
-            totalPrice = totalPrice.add(BOOK_PRICE.multiply(BigDecimal.valueOf(list.size())).multiply(BigDecimal.valueOf(discount)));
+            BigDecimal discount = DiscountResolver.getDiscountPrice(list.size());
+            totalPrice = totalPrice.add(discount);
         }
         return totalPrice.setScale(1, RoundingMode.HALF_EVEN);
     }
