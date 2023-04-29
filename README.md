@@ -11,7 +11,7 @@ Used technical stack:
 
 ![image](https://user-images.githubusercontent.com/80068219/235328385-28931bf0-4e41-45d6-803a-0aa4eaddc8be.png)
 
-* Docker version 20.10.24
+* Docker version 20.10.24 and docker desktop
 
 ![image](https://user-images.githubusercontent.com/80068219/235328400-83622a2f-a65b-4f40-afa7-0f776aff516a.png)
 
