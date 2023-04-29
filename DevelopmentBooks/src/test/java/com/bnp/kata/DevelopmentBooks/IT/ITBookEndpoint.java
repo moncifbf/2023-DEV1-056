@@ -22,16 +22,42 @@ class ITBookEndpoint {
     private TestRestTemplate restTemplate;
 
     @Test
-    void testGetPrice() {
+    void testGetPrice_OneBook() {
         PurchaseDTO purchase = new PurchaseDTO();
         Map<String, Integer> bookQuantities = new HashMap<>();
         bookQuantities.put("Clean Code (Robert Martin, 2008)", 1);
         purchase.setBookQuantities(bookQuantities);
 
-        PaymentReceiptDTO paymentReceiptDTO = new PaymentReceiptDTO();
-        paymentReceiptDTO.setPrice(BigDecimal.valueOf(50));
+        ResponseEntity<PaymentReceiptDTO> response = restTemplate.postForEntity("/api/v1/book/buy", purchase, PaymentReceiptDTO.class);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(new BigDecimal("50.0"), response.getBody().getPrice());
+    }
+
+    @Test
+    void testGetPrice_TwoBook() {
+        PurchaseDTO purchase = new PurchaseDTO();
+        Map<String, Integer> bookQuantities = new HashMap<>();
+        bookQuantities.put("Clean Code (Robert Martin, 2008)", 2);
+        purchase.setBookQuantities(bookQuantities);
 
         ResponseEntity<PaymentReceiptDTO> response = restTemplate.postForEntity("/api/v1/book/buy", purchase, PaymentReceiptDTO.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(new BigDecimal("100.0"), response.getBody().getPrice());
+    }
+
+    @Test
+    void testGetPrice_MainTestCase() {
+        PurchaseDTO purchase = new PurchaseDTO();
+        Map<String, Integer> bookQuantities = new HashMap<>();
+        bookQuantities.put("Clean Code", 2);
+        bookQuantities.put("Clean Coder", 2);
+        bookQuantities.put("Clean Architecture", 2);
+        bookQuantities.put("Test Driven Development by Example", 1);
+        bookQuantities.put("Working effectively with Legacy Code", 1);
+        purchase.setBookQuantities(bookQuantities);
+
+        ResponseEntity<PaymentReceiptDTO> response = restTemplate.postForEntity("/api/v1/book/buy", purchase, PaymentReceiptDTO.class);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(new BigDecimal("320.0"), response.getBody().getPrice());
     }
 }

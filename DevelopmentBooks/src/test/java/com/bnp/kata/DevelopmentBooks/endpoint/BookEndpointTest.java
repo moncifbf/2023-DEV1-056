@@ -27,7 +27,7 @@ class BookEndpointTest {
     private PricingService pricingService;
 
     @Test
-    void buyBooks_ShouldReturnPaymentReceipt() throws Exception {
+    void buyBooks_ShouldReturnPaymentReceipt_For_One_Book() throws Exception {
         PaymentReceiptDTO paymentReceiptDTO = new PaymentReceiptDTO();
         paymentReceiptDTO.setPrice(new BigDecimal("50"));
 
