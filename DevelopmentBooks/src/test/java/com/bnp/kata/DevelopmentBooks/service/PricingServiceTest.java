@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 class PricingServiceTest {
+    public static final BigDecimal EXPECTED_ONE_BOOK_PRICE = BigDecimal.valueOf(50).setScale(1, RoundingMode.HALF_EVEN);
+
     private PricingService pricingService;
 
     @BeforeEach
@@ -27,6 +29,6 @@ class PricingServiceTest {
         purchaseDTO.setBookQuantities(booksQuantities);
 
         PaymentReceiptDTO paymentReceiptDTO = pricingService.getPrice(purchaseDTO);
-        Assertions.assertEquals(BigDecimal.valueOf(50).setScale(1, RoundingMode.HALF_EVEN), paymentReceiptDTO.getPrice());
+        Assertions.assertEquals(EXPECTED_ONE_BOOK_PRICE, paymentReceiptDTO.getPrice());
     }
 }
