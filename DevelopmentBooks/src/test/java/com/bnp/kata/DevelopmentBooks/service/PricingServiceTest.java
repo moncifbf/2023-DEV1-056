@@ -11,7 +11,11 @@ import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 class PricingServiceTest {
+    
     public static final BigDecimal EXPECTED_ONE_BOOK_PRICE = BigDecimal.valueOf(50).setScale(1, RoundingMode.HALF_EVEN);
     public static final BigDecimal EXPECTED_TWO_BOOKS_PRICE = BigDecimal.valueOf(100).setScale(1, RoundingMode.HALF_EVEN);
     public static final BigDecimal EXPECTED_THREE_BOOKS_PRICE = BigDecimal.valueOf(150).setScale(1, RoundingMode.HALF_EVEN);
@@ -37,7 +41,7 @@ class PricingServiceTest {
         purchaseDTO.setBookQuantities(booksQuantities);
 
         PaymentReceiptDTO paymentReceiptDTO = pricingService.getPrice(purchaseDTO);
-        Assertions.assertEquals(EXPECTED_ONE_BOOK_PRICE, paymentReceiptDTO.getPrice());
+        assertEquals(EXPECTED_ONE_BOOK_PRICE, paymentReceiptDTO.getPrice());
     }
 
     @Test
@@ -48,7 +52,7 @@ class PricingServiceTest {
         purchaseDTO.setBookQuantities(booksQuantities);
 
         PaymentReceiptDTO paymentReceiptDTO = pricingService.getPrice(purchaseDTO);
-        Assertions.assertEquals(EXPECTED_TWO_BOOKS_PRICE, paymentReceiptDTO.getPrice());
+        assertEquals(EXPECTED_TWO_BOOKS_PRICE, paymentReceiptDTO.getPrice());
     }
 
     @Test
@@ -59,7 +63,7 @@ class PricingServiceTest {
         purchaseDTO.setBookQuantities(booksQuantities);
 
         PaymentReceiptDTO paymentReceiptDTO = pricingService.getPrice(purchaseDTO);
-        Assertions.assertEquals(EXPECTED_THREE_BOOKS_PRICE, paymentReceiptDTO.getPrice());
+        assertEquals(EXPECTED_THREE_BOOKS_PRICE, paymentReceiptDTO.getPrice());
     }
 
     @Test
@@ -70,7 +74,7 @@ class PricingServiceTest {
         purchaseDTO.setBookQuantities(booksQuantities);
 
         PaymentReceiptDTO paymentReceiptDTO = pricingService.getPrice(purchaseDTO);
-        Assertions.assertEquals(EXPECTED_FOUR_BOOKS_PRICE, paymentReceiptDTO.getPrice());
+        assertEquals(EXPECTED_FOUR_BOOKS_PRICE, paymentReceiptDTO.getPrice());
     }
 
     @Test
@@ -81,7 +85,7 @@ class PricingServiceTest {
         purchaseDTO.setBookQuantities(booksQuantities);
 
         PaymentReceiptDTO paymentReceiptDTO = pricingService.getPrice(purchaseDTO);
-        Assertions.assertEquals(EXPECTED_FIVE_BOOKS_PRICE, paymentReceiptDTO.getPrice());
+        assertEquals(EXPECTED_FIVE_BOOKS_PRICE, paymentReceiptDTO.getPrice());
     }
 
     @Test
@@ -93,7 +97,7 @@ class PricingServiceTest {
         purchaseDTO.setBookQuantities(booksQuantities);
 
         PaymentReceiptDTO paymentReceiptDTO = pricingService.getPrice(purchaseDTO);
-        Assertions.assertEquals(EXPECTED_TWO_DIFFERENT_BOOKS_PRICE, paymentReceiptDTO.getPrice());
+        assertEquals(EXPECTED_TWO_DIFFERENT_BOOKS_PRICE, paymentReceiptDTO.getPrice());
     }
 
     @Test
@@ -106,7 +110,7 @@ class PricingServiceTest {
         purchaseDTO.setBookQuantities(booksQuantities);
 
         PaymentReceiptDTO paymentReceiptDTO = pricingService.getPrice(purchaseDTO);
-        Assertions.assertEquals(EXPECTED_THREE_DIFFERENT_BOOKS_PRICE, paymentReceiptDTO.getPrice());
+        assertEquals(EXPECTED_THREE_DIFFERENT_BOOKS_PRICE, paymentReceiptDTO.getPrice());
     }
 
     @Test
@@ -121,7 +125,7 @@ class PricingServiceTest {
         purchaseDTO.setBookQuantities(booksQuantities);
 
         PaymentReceiptDTO paymentReceiptDTO = pricingService.getPrice(purchaseDTO);
-        Assertions.assertEquals(EXPECTED_THREE_BOOKS_TWO_EACH_AND_TWO_DIFFERENT_BOOKS, paymentReceiptDTO.getPrice());
+        assertEquals(EXPECTED_THREE_BOOKS_TWO_EACH_AND_TWO_DIFFERENT_BOOKS, paymentReceiptDTO.getPrice());
     }
 
     @Test
@@ -136,6 +140,28 @@ class PricingServiceTest {
         purchaseDTO.setBookQuantities(booksQuantities);
 
         PaymentReceiptDTO paymentReceiptDTO = pricingService.getPrice(purchaseDTO);
-        Assertions.assertEquals(EXPECTED_FOUR_BOOKS_TWO_EACH_AND_ONE_DIFFERENT, paymentReceiptDTO.getPrice());
+        assertEquals(EXPECTED_FOUR_BOOKS_TWO_EACH_AND_ONE_DIFFERENT, paymentReceiptDTO.getPrice());
+    }
+
+    @Test
+    void getPrice_IllegalStrategy() {
+        PurchaseDTO purchaseDTO = new PurchaseDTO();
+        Map<String, Integer> booksQuantities = new HashMap<>();
+        booksQuantities.put("Book1", 2);
+        booksQuantities.put("Book2", 2);
+        booksQuantities.put("Book3", 2);
+        booksQuantities.put("Book4", 2);
+        booksQuantities.put("Book6", 1);
+        booksQuantities.put("Book7", 1);
+        booksQuantities.put("Book8", 1);
+        booksQuantities.put("Book9", 1);
+        booksQuantities.put("Book10", 1);
+        purchaseDTO.setBookQuantities(booksQuantities);
+
+        IllegalArgumentException thrown = Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            pricingService.getPrice(purchaseDTO);
+        });
+
+        assertTrue(thrown.getMessage().contains("Invalid discount strategy based on size"));
     }
 }

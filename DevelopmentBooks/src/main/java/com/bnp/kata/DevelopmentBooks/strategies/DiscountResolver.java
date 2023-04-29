@@ -9,26 +9,13 @@ import java.math.BigDecimal;
 public class DiscountResolver {
 
     public static BigDecimal getDiscountPrice(int size) {
-        BigDecimal finalPrice = BigDecimal.ZERO;
-        switch (size) {
-            case 1:
-                finalPrice = DiscountStrategy.oneBookStrategy().apply(size);
-                break;
-            case 2:
-                finalPrice = DiscountStrategy.twoBooksStrategy().apply(size);
-                break;
-            case 3:
-                finalPrice = DiscountStrategy.threeBooksStrategy().apply(size);
-                break;
-            case 4:
-                finalPrice = DiscountStrategy.fourBooksStrategy().apply(size);
-                break;
-            case 5:
-                finalPrice = DiscountStrategy.fiveBooksStrategy().apply(size);
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid discount strategy based on size: " + size);
-        }
-        return finalPrice;
+        return switch (size) {
+            case 1 -> DiscountStrategy.oneBookStrategy().apply(size);
+            case 2 -> DiscountStrategy.twoBooksStrategy().apply(size);
+            case 3 -> DiscountStrategy.threeBooksStrategy().apply(size);
+            case 4 -> DiscountStrategy.fourBooksStrategy().apply(size);
+            case 5 -> DiscountStrategy.fiveBooksStrategy().apply(size);
+            default -> throw new IllegalArgumentException("Invalid discount strategy based on size: " + size);
+        };
     }
 }
