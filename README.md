@@ -56,9 +56,9 @@ Make sure that all tests passed successfully
 
 ![image](https://user-images.githubusercontent.com/80068219/235328560-92dbf424-6a86-4b13-84e9-c3d2242d13f8.png)
 
-* This means that our spring-boot app is up but we can't found any resource on the base path. 
+* This means that our spring-boot app is up but we can't find any resource on the base path. 
 
-* Start Postman and import the collection given on folder Postman. 
+* Start Postman and import the collection given on folder Postman: [the collection](https://github.com/moncifbf/2023-DEV1-056/blob/master/Postman/BNP-test.postman_collection.json)
 
 ![image](https://user-images.githubusercontent.com/80068219/235328583-34f2a9ee-23af-48dc-95d8-cf51a0f4c933.png)
 
